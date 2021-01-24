@@ -91,7 +91,7 @@ Fortunately, we have another method of pwning this binary. Let me introduce you 
 
 I'll give a short summary of how it works, but I won't explain it in great details in this writeup (since I don't entirely understand it either), but I provided some great resources at the end of the document, you should definitely check them out.
 
-**TL;DR**: Return Oriented Programming works by reusing the already existing instructions in the executable, chaining them together to make them do whatever we want to, with some limitations, of course. We call these useful instructions `gadgets`. The name of this technique comes from that each gadget typically ends with a return instruction.
+**TL;DR**: Return Oriented Programming works by reusing the already existing instructions in the executable, chaining them together to make them do whatever we want them to do, with some limitations, of course. We call these useful instructions `gadgets`. The name of this technique comes from that each gadget typically ends with a return instruction.
 
 Now armed with this knowledge, let's make a new plan!
 
@@ -101,9 +101,9 @@ I'm using pwntools to automate this process.
 
 ### 1. Basic Buffer Overflow
 
-First we need to find the offset to overwrite the return address on the stack. From the decompiler code, we can tell that the size of the buffer is 204 bytes, so we can give it a far longer pattern as an input, that we can recognize easily after we overwrite the IP.
+First we need to find the offset to overwrite the return address on the stack. From the decompiled code, we can tell that the size of the buffer is 204 bytes, so we can give it a far longer pattern as an input, that we can recognize easily after overwriting the IP.
 
-Fortunately we don't have to do it by hand, because pwntools have an easy way to generate a cyclic pattern.
+Fortunately we don't have to do it by hand, because pwntools has an easy way of generating a cyclic pattern.
 
 ```py
 from pwn import *
@@ -128,7 +128,7 @@ $ sudo dmesg
 [...]
 ```
 
-We've successfully overwritten the IP at `0x63616164`, which we can use now to generate a padding with the proper length, using pwntools' `cyclic_find` to find the proper length, and using it as an input to the `cyclic` function.
+We've successfully overwritten the IP at `0x63616164`, which we can use now to generate a padding with the proper length, using pwntools' `cyclic_find` to find the offset, and using it as an input to the `cyclic` function.
 
 Let's try setting the IP to `0xdeadbeef`:
 ```py
