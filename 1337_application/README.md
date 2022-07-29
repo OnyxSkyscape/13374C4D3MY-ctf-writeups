@@ -103,7 +103,7 @@ I'm using pwntools to automate this process.
 
 First we need to find the offset to overwrite the return address on the stack. From the decompiled code, we can tell that the size of the buffer is 204 bytes, so we can give it a far longer pattern as an input, that we can recognize easily after overwriting the IP.
 
-Fortunately we don't have to do it by hand, because pwntools has an easy way of generating a cyclic pattern.
+Fortunately we don't have to do it by hand, because pwntools has an easy way of generating a cyclic pattern. The length of the pattern is determined by the length of the buffer in this case, I like to add a good 100 bytes after the end of the buffer.
 
 ```py
 from pwn import *
